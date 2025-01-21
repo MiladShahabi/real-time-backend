@@ -12,14 +12,14 @@ const server = http.createServer(app);
 // Initialize a Socket.IO server and configure CORS settings
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow all origins to connect
+    origin: ["https://api.miladshahabi.de", "http://localhost:3000"], // Replace with allowed origins
     methods: ["GET", "POST"], // Allow GET and POST methods
   },
 });
 
 // Socket.IO event: Handle new client connections
 io.on("connection", (socket) => {
-  console.log("A user connected");
+  console.log(`A user connected: ${socket.id}`);
 
   // Handle the 'joinRoom' event: Join a specific room
   socket.on("joinRoom", (room) => {
@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
 
   // Handle the 'disconnect' event: Log when a user disconnects
   socket.on("disconnect", () => {
-    console.log("A user disconnected");
+    console.log(`A user disconnected: ${socket.id}`);
   });
 });
 
@@ -50,7 +50,7 @@ setInterval(() => {
 }, 1000); // Execute the interval every 1 second
 
 // Define the port on which the server will listen
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Start the server and log the URL
 server.listen(PORT, () => {
